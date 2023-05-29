@@ -1,3 +1,4 @@
+import { Box, Card, Code, Heading, SimpleGrid } from "@chakra-ui/react";
 import React from "react";
 import "./App.css";
 import FocusableSpan from "./components/FocusableSpan";
@@ -7,25 +8,21 @@ const text =
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-        <pre>
-          {text.split(". ").map((sentence) => (
-            <>
-              <FocusableSpan value={sentence} />
-              <br />
-            </>
-          ))}
-        </pre>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Box>
+      <SimpleGrid spacingY={4}>
+        <Heading>heapedit</Heading>
+        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
+          <Code as="pre">
+            {text.split(". ").map((sentence) => (
+              <>
+                <FocusableSpan value={sentence} />
+                <br />
+              </>
+            ))}
+          </Code>
+        </Card>
+      </SimpleGrid>
+    </Box>
   );
 };
 
