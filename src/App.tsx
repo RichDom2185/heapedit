@@ -1,6 +1,5 @@
 import { Box, Card, Heading, SimpleGrid } from "@chakra-ui/react";
 import { selectAll } from "hast-util-select";
-import { h } from "hastscript";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
 import React, { useEffect, useState } from "react";
@@ -45,27 +44,15 @@ const App: React.FC = () => {
     selectAll("h6", hast).forEach((node) =>
       decorateInlineComponent(node, "###### ")
     );
-    selectAll("strong", hast).forEach((node) => {
-      node.children = [
-        h("span.token-prefix", "**"),
-        ...node.children,
-        h("span.token-suffix", "**"),
-      ];
-    });
-    selectAll("em", hast).forEach((node) => {
-      node.children = [
-        h("span.token-prefix", "_"),
-        ...node.children,
-        h("span.token-suffix", "_"),
-      ];
-    });
-    selectAll("code", hast).forEach((node) => {
-      node.children = [
-        h("span.token-prefix", "`"),
-        ...node.children,
-        h("span.token-suffix", "`"),
-      ];
-    });
+    selectAll("strong", hast).forEach((node) =>
+      decorateInlineComponent(node, "**", "**")
+    );
+    selectAll("em", hast).forEach((node) =>
+      decorateInlineComponent(node, "_", "_")
+    );
+    selectAll("code", hast).forEach((node) =>
+      decorateInlineComponent(node, "`", "`")
+    );
     setParsed(
       unified()
         .use(rehypeReact, {
