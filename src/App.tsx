@@ -20,13 +20,31 @@ const App: React.FC = () => {
   useEffect(() => {
     const mdast = fromMarkdown(text);
     const hast = toHast(mdast, {});
-    selectAll("p", hast).forEach((node) => {
+    selectAll("p, h1, h2, h3, h4, h5, h6", hast).forEach((node) => {
       node.properties = {
         ...node.properties,
         contentEditable: true,
         tabIndex: "-1",
         className: "section",
       };
+    });
+    selectAll("h1", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "# "), ...node.children];
+    });
+    selectAll("h2", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "## "), ...node.children];
+    });
+    selectAll("h3", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "### "), ...node.children];
+    });
+    selectAll("h4", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "#### "), ...node.children];
+    });
+    selectAll("h5", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "##### "), ...node.children];
+    });
+    selectAll("h6", hast).forEach((node) => {
+      node.children = [h("span.token-prefix", "###### "), ...node.children];
     });
     selectAll("strong", hast).forEach((node) => {
       node.children = [
@@ -57,6 +75,12 @@ const App: React.FC = () => {
           passNode: true,
           components: {
             p: createBlockComponent("p", setText),
+            h1: createBlockComponent("h1", setText),
+            h2: createBlockComponent("h2", setText),
+            h3: createBlockComponent("h3", setText),
+            h4: createBlockComponent("h4", setText),
+            h5: createBlockComponent("h5", setText),
+            h6: createBlockComponent("h6", setText),
           },
         })
         .stringify(hast as any)
