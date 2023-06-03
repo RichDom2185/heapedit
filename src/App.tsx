@@ -65,7 +65,7 @@ const App: React.FC = () => {
                 },
               };
               return React.cloneElement(
-                <p {...otherProps} />,
+                <p {...otherProps} suppressContentEditableWarning />,
                 overriddenProps,
                 React.Children.map(children, (child, i) => {
                   const element =
