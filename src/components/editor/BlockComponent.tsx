@@ -1,8 +1,12 @@
 import React from "react";
+import {
+  BlockComponent,
+  blockComponentToOwnComponentMap,
+} from "../../types/editor";
 
 // Higher-order component builder
 export const createBlockComponent = (
-  htmlTagName: string,
+  htmlTagName: BlockComponent,
   handleMarkdownUpdate: React.Dispatch<React.SetStateAction<string>>
 ) => {
   return (props: any) => {
@@ -14,9 +18,9 @@ export const createBlockComponent = (
         handleMarkdownUpdate(e.target.textContent ?? "");
       },
     };
-    const Tag = htmlTagName;
+    const Component = blockComponentToOwnComponentMap[htmlTagName];
     return React.cloneElement(
-      <Tag {...otherProps} suppressContentEditableWarning />,
+      <Component {...otherProps} suppressContentEditableWarning />,
       overriddenProps,
       React.Children.map(children, (child, i) => {
         const element =
