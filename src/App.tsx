@@ -72,7 +72,6 @@ const App: React.FC = () => {
         .use(rehypeReact, {
           createElement: React.createElement,
           Fragment: React.Fragment,
-          passNode: true,
           components: {
             p: createBlockComponent("p", setText),
             h1: createBlockComponent("h1", setText),
