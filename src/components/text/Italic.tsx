@@ -15,7 +15,7 @@ type Test = React.ComponentProps<
   Required<Required<Options>["components"]>["b"]
 >;
 
-const Bold: React.FC<Props> = (props) => {
+const Italic: React.FC<Props> = (props) => {
   const { children, callback, node, blurCallback, isFocused } = props;
   // const [isFocused, setIsFocused] = useState(false);
 
@@ -34,8 +34,8 @@ const Bold: React.FC<Props> = (props) => {
   }, []);
 
   return (
-    <strong>
-      {isFocused && "**"}
+    <i>
+      {isFocused && "_"}
       <ContentEditable
         tagName="span"
         // onBlur={handleBlur}
@@ -44,9 +44,9 @@ const Bold: React.FC<Props> = (props) => {
         html={String(children)}
         onChange={handleChange}
       />
-      {isFocused && "**"}
-    </strong>
+      {isFocused && "_"}
+    </i>
   );
 };
 
-export default Bold;
+export default Italic;

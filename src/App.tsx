@@ -1,118 +1,114 @@
 import { Box, Card, Heading, SimpleGrid } from "@chakra-ui/react";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { toHast } from "mdast-util-to-hast";
 import React, { useEffect, useRef, useState } from "react";
-import "./App.css";
-import { parse3 } from "./utils/parser";
-
-import { Root as HastRoot } from "hast";
-import { Root as MdastRoot } from "mdast";
+import { Remark } from "react-remark";
 import rehypeReact from "rehype-react";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import remarkStringify from "remark-stringify";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
+import "./App.css";
 import Bold from "./components/text/Bold";
+import Italic from "./components/text/Italic";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const App: React.FC = () => {
   const [text, setText] = useState(
-    "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
+    "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph." +
+      "\n\n\n" +
+      "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
   );
   const [parsed, setParsed] = useState<React.ReactNode>("");
-  const [content, setContent] = useState("");
+
+  const testRef = useRef<any[]>([]);
 
   useEffect(() => {
-    parse2(text).then((parsedText) => {
-      // setParsed(String(parsedText));
-      parse(String(parsedText)).then((parsedText) => {
-        setParsed(parsedText.result);
-      });
+    const mdast = fromMarkdown(text);
+    // const mdastNodes: any[] = [];
+    // visit(mdast, (node: any) => {
+    //   if (node.value !== undefined) {
+    //     // console.log(node);
+    //     mdastNodes.push(node);
+    //   }
+    // });
+    const hast = toHast(mdast, {});
+    const hastNodes: any[] = [];
+    visit(hast as any, (node) => {
+      // console.log(node);
+      // if (node.value !== undefined && node.value !== "\n") {
+      hastNodes.push(node);
+      // }
     });
+    setParsed(
+      unified()
+        .use(rehypeReact, {
+          createElement: React.createElement,
+          Fragment: React.Fragment,
+          passNode: true,
+          components: {
+            p: (props: any) => {
+              const { children, ...otherProps } = props;
+              return React.cloneElement(
+                <p {...otherProps} className="akjsdhks" />,
+                {},
+                React.Children.map(children, (child, i) => {
+                  // if (typeof child === "string" || typeof child === "number") {
+                  //   return <span key={i}>{child}</span>;
+                  // }
+                  // const newElement = React.cloneElement(child as any, {
+                  //   ref: (node: any) => {
+                  //     if (testRef.current) {
+                  //       testRef.current[i] = node;
+                  //     }
+                  //   },
+                  // });
+                  // console.log(newElement);
+                  // return newElement;
+
+                  const element =
+                    typeof child === "string" || typeof child === "number" ? (
+                      <span key={i}>{child}</span>
+                    ) : (
+                      child
+                    );
+                  const newElement = React.cloneElement(element as any, {
+                    ref: (node: any) => {
+                      if (testRef.current) {
+                        testRef.current.push(node);
+                      }
+                    },
+                  });
+                  return newElement;
+                })
+              );
+            },
+            // strong: (props: any) =>
+            //   React.createElement(Bold, {
+            //     ...props,
+            //     callback: ({ val, node, e }) => {
+            //       console.log(e.target.outerHTML);
+            //       // const index = hastNodes.findIndex((n) => n === node);
+            //       visitParents(hast as any, node, (node, ancestors) => {
+            //         const immediateParent = ancestors[ancestors.length - 1];
+            //         console.log(node.type, immediateParent);
+            //       });
+            //       // console.log(index);
+            //       // // console.log(hastNodes);
+            //       // console.log(mdastNodes[index]);
+            //     },
+            //   }),
+          },
+        })
+        .stringify(hast as any)
+    );
   }, [text]);
 
   const ref = useRef<HTMLDivElement>(null);
   // console.log(ref.current?.innerHTML);
 
-  let i = 0;
-  const nodes: any[] = [];
-  const nodes2: any[] = [];
-  const logger = () => (tree: HastRoot) => {
-    visit(tree, (node: any) => {
-      if (node.type === "text") {
-        node.id = i++;
-        // console.log(node);
-        nodes.push(node);
-      }
-    });
-  };
+  console.log(testRef.current?.map((e) => e?.tagName === "SPAN"));
 
-  const parser = unified()
-    .use(remarkParse)
-    .use(remarkRehype)
-    .use(logger)
-    .use(rehypeReact, {
-      createElement: React.createElement,
-      Fragment: React.Fragment,
-      passNode: true,
-      components: {
-        strong: (props: any) =>
-          React.createElement(
-            Bold,
-            {
-              blurCallback: (e: EventTarget & Element) => {
-                console.log(e.innerHTML);
-              },
-              callback: async (node) => {
-                // console.log(ref.current?.innerHTML);
-                // console.log(tokenRef.current?.innerText);
-                // const offset = node.position.start.offset;
-                const id = node.id;
-                // console.log(id);
-                console.log(nodes.length);
-                console.log(nodes2.length);
-                console.log(nodes);
-                console.log(nodes2);
-
-                // const val = e.innerHTML;
-                // console.log(val);
-                // e.outerHTML = val;
-                // e.blur();
-                // await sleep(0);
-                // // parse2(`**${val}**`).then((text) => {
-                // //   e.outerHTML = String(text);
-                // // })
-                // e.innerText = val;
-                // console.log(ref.current?.innerHTML);
-                parse3(ref.current?.innerHTML ?? "").then((text) => {
-                  // console.log(text);
-                  // setText(String(text));
-                  // e.focus();
-                });
-                // console.log(node);
-              },
-              ...props,
-            }
-            // props.children
-          ),
-      },
-    });
-  const parse = async (markdown: string) => await parser.process(markdown);
-
-  const logger2 = () => (tree: MdastRoot) => {
-    visit(tree, (node) => {
-      if ((node.type === "text") | (node.type === "inlineCode")) {
-        // node.id = i++;
-        // console.log(node);
-        // console.log(node.type);
-        nodes2.push(node);
-      }
-    });
-  };
-
-  const parser2 = unified().use(remarkParse).use(logger2).use(remarkStringify);
-
-  const parse2 = async (markdown: string) => await parser2.process(markdown);
+  const [isFocused, setIsFocused] = useState(true);
 
   return (
     <Box>
@@ -123,9 +119,68 @@ const App: React.FC = () => {
           <div ref={ref}>{parsed}</div>
         </Card>
 
+        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
+          <button onClick={() => setIsFocused((prev) => !prev)}>
+            {isFocused ? "true" : "false"}
+          </button>
+        </Card>
+
+        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
+          <div ref={ref}>
+            <Remark
+              rehypeReactOptions={{
+                passNode: true,
+                components: {
+                  p: (props: any) => {
+                    const { children, ...otherProps } = props;
+                    return React.cloneElement(
+                      <p {...otherProps} className="akjsdhks" />,
+                      {},
+                      React.Children.toArray(children).map((child, i) => {
+                        if (
+                          typeof child === "string" ||
+                          typeof child === "number"
+                        ) {
+                          return <span key={i}>{child}</span>;
+                        }
+                        // console.log(child);
+                        // return React.cloneElement(child as any, {
+                        //   isFocused: false,
+                        // });
+                        return child;
+                      })
+                    );
+                  },
+                  strong: (props: any) =>
+                    React.createElement(Bold, {
+                      ...props,
+                      isFocused,
+                      callback: ({ val, node, e }) => {
+                        console.log(ref.current?.innerText);
+                      },
+                    }),
+                  em: (props: any) =>
+                    React.createElement(Italic, {
+                      ...props,
+                      isFocused,
+                      callback: ({ val, node, e }) => {
+                        console.log(ref.current?.innerText);
+                      },
+                    }),
+                },
+              }}
+            >
+              {text}
+            </Remark>
+          </div>
+        </Card>
+
         <textarea
           value={text}
-          onChange={(e) => setText(e.currentTarget.value)}
+          onChange={(e) => {
+            testRef.current = [];
+            setText(e.currentTarget.value);
+          }}
         />
       </SimpleGrid>
     </Box>
