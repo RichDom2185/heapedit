@@ -20,7 +20,6 @@ const App: React.FC = () => {
     const mdast = fromMarkdown(text);
     const hast = toHast(mdast, {});
     selectAll("p", hast).forEach((node) => {
-      console.log(node);
       node.properties = {
         ...node.properties,
         contentEditable: true,
@@ -29,11 +28,24 @@ const App: React.FC = () => {
       };
     });
     selectAll("strong", hast).forEach((node) => {
-      console.log(node.children);
       node.children = [
-        h("span.prefix", "**"),
+        h("span.token-prefix", "**"),
         ...node.children,
-        h("span.suffix", "**"),
+        h("span.token-suffix", "**"),
+      ];
+    });
+    selectAll("em", hast).forEach((node) => {
+      node.children = [
+        h("span.token-prefix", "_"),
+        ...node.children,
+        h("span.token-suffix", "_"),
+      ];
+    });
+    selectAll("code", hast).forEach((node) => {
+      node.children = [
+        h("span.token-prefix", "`"),
+        ...node.children,
+        h("span.token-suffix", "`"),
       ];
     });
     setParsed(
@@ -45,14 +57,16 @@ const App: React.FC = () => {
           components: {
             p: (props: any) => {
               const { children, ...otherProps } = props;
+              const overriddenProps: {
+                onBlur: React.FocusEventHandler<HTMLParagraphElement>;
+              } = {
+                onBlur: (e) => {
+                  setText(e.target.textContent ?? "");
+                },
+              };
               return React.cloneElement(
                 <p {...otherProps} />,
-                {
-                  onBlur: (e: any) => {
-                    setText(e.target.textContent);
-                    console.log(e);
-                  },
-                },
+                overriddenProps,
                 React.Children.map(children, (child, i) => {
                   const element =
                     typeof child === "string" || typeof child === "number" ? (
@@ -79,12 +93,13 @@ const App: React.FC = () => {
           <div>{parsed}</div>
         </Card>
 
-        {/* <textarea
+        {/* FOR DEBUGGING PURPOSES */}
+        <textarea
           value={text}
           onChange={(e) => {
             setText(e.currentTarget.value);
           }}
-        /> */}
+        />
       </SimpleGrid>
     </Box>
   );
