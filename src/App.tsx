@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import "./App.css";
+import { createBlockComponent } from "./components/editor/BlockComponent";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -55,29 +56,7 @@ const App: React.FC = () => {
           Fragment: React.Fragment,
           passNode: true,
           components: {
-            p: (props: any) => {
-              const { children, ...otherProps } = props;
-              const overriddenProps: {
-                onBlur: React.FocusEventHandler<HTMLParagraphElement>;
-              } = {
-                onBlur: (e) => {
-                  setText(e.target.textContent ?? "");
-                },
-              };
-              return React.cloneElement(
-                <p {...otherProps} suppressContentEditableWarning />,
-                overriddenProps,
-                React.Children.map(children, (child, i) => {
-                  const element =
-                    typeof child === "string" || typeof child === "number" ? (
-                      <span key={i}>{child}</span>
-                    ) : (
-                      child
-                    );
-                  return element;
-                })
-              );
-            },
+            p: createBlockComponent("p", setText),
           },
         })
         .stringify(hast as any)
