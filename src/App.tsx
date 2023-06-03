@@ -1,8 +1,9 @@
 import { Box, Card, Heading, SimpleGrid } from "@chakra-ui/react";
+import { selectAll } from "hast-util-select";
+import { h } from "hastscript";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
-import React, { useEffect, useRef, useState } from "react";
-import { Remark } from "react-remark";
+import React, { useEffect, useState } from "react";
 import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
@@ -12,13 +13,11 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const App: React.FC = () => {
   const [text, setText] = useState(
-    "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph." +
-      "\n\n\n" +
-      "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
+    "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
   );
   const [parsed, setParsed] = useState<React.ReactNode>("");
 
-  const testRef = useRef<any[]>([]);
+  // const testRef = useRef<any[]>([]);
 
   useEffect(() => {
     const mdast = fromMarkdown(text);
@@ -37,6 +36,25 @@ const App: React.FC = () => {
       hastNodes.push(node);
       // }
     });
+    selectAll("p", hast).forEach((node) => {
+      console.log(node);
+      node.properties = {
+        ...node.properties,
+        contentEditable: true,
+        tabIndex: "-1",
+        className: "section",
+      };
+    });
+    selectAll("strong", hast).forEach((node) => {
+      console.log(node.children);
+      node.children = [
+        h("span.prefix", "**"),
+        ...node.children,
+        h("span.suffix", "**"),
+      ];
+    });
+    // testRef.current = [];
+    // len.current = 0;
     setParsed(
       unified()
         .use(rehypeReact, {
@@ -47,66 +65,36 @@ const App: React.FC = () => {
             p: (props: any) => {
               const { children, ...otherProps } = props;
               return React.cloneElement(
-                <p {...otherProps} className="akjsdhks" />,
-                {},
+                <p {...otherProps} />,
+                {
+                  onBlur: (e: any) => {
+                    setText(e.target.textContent);
+                    console.log(e);
+                  },
+                },
                 React.Children.map(children, (child, i) => {
-                  // if (typeof child === "string" || typeof child === "number") {
-                  //   return <span key={i}>{child}</span>;
-                  // }
-                  // const newElement = React.cloneElement(child as any, {
-                  //   ref: (node: any) => {
-                  //     if (testRef.current) {
-                  //       testRef.current[i] = node;
-                  //     }
-                  //   },
-                  // });
-                  // console.log(newElement);
-                  // return newElement;
-
                   const element =
                     typeof child === "string" || typeof child === "number" ? (
                       <span key={i}>{child}</span>
                     ) : (
                       child
                     );
-                  const newElement = React.cloneElement(element as any, {
-                    ref: (node: any) => {
-                      if (testRef.current) {
-                        testRef.current.push(node);
-                      }
-                    },
-                  });
-                  return newElement;
+                  return element;
                 })
               );
             },
-            // strong: (props: any) =>
-            //   React.createElement(Bold, {
-            //     ...props,
-            //     callback: ({ val, node, e }) => {
-            //       console.log(e.target.outerHTML);
-            //       // const index = hastNodes.findIndex((n) => n === node);
-            //       visitParents(hast as any, node, (node, ancestors) => {
-            //         const immediateParent = ancestors[ancestors.length - 1];
-            //         console.log(node.type, immediateParent);
-            //       });
-            //       // console.log(index);
-            //       // // console.log(hastNodes);
-            //       // console.log(mdastNodes[index]);
-            //     },
-            //   }),
           },
         })
         .stringify(hast as any)
     );
   }, [text]);
 
-  const ref = useRef<HTMLDivElement>(null);
+  // const ref = useRef<HTMLDivElement>(null);
   // console.log(ref.current?.innerHTML);
 
-  console.log(testRef.current?.map((e) => e?.tagName === "SPAN"));
+  // console.log(testRef.current?.map((e) => e?.tagName === "SPAN"));
 
-  const [isFocused, setIsFocused] = useState(true);
+  // const [isFocused, setIsFocused] = useState(true);
 
   return (
     <Box>
@@ -114,88 +102,70 @@ const App: React.FC = () => {
         <Heading>heapedit</Heading>
 
         <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
-          <div ref={ref}>{parsed}</div>
+          {/* <div ref={ref}>{parsed}</div> */}
+          <div>{parsed}</div>
         </Card>
 
-        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
+        {/* <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
           <button onClick={() => setIsFocused((prev) => !prev)}>
             {isFocused ? "true" : "false"}
           </button>
-        </Card>
+        </Card> */}
 
-        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
+        {/* <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
           <div ref={ref}>
             <Remark
               rehypeReactOptions={{
-                passNode: true,
                 components: {
                   p: (props: any) => {
                     const { children, ...otherProps } = props;
                     return React.cloneElement(
                       <p {...otherProps} className="akjsdhks" />,
                       {},
-                      React.Children.map(children, (child, i) => {
+                      React.Children.map(children, (child) => {
                         const element =
                           typeof child === "string" ||
                           typeof child === "number" ? (
-                            <span key={i}>{child}</span>
+                            <span key={len.current}>{child}</span>
                           ) : (
                             child
                           );
+                        len.current += 1;
                         const newElement = React.cloneElement(element as any, {
                           ref: (node: any) => {
                             if (testRef.current) {
                               testRef.current.push(node);
                             }
                           },
-                          contentEditable: true,
+                          className: `token ${element.type}`,
+                          // contentEditable: true,
                           onInput: (e) => {
-                            console.log(e);
+                            console.log(element);
                             const el = e.target as HTMLElement;
-                            console.log(el.innerHTML);
-                            console.log(i);
-                            console.log(testRef.current.map((e) => e.ref));
-                            // console.log(element);
-                            const ind = testRef.current?.findIndex(
-                              (n) => n === element
-                            );
-                            console.log(ind);
+                            console.log(el.outerHTML);
+                            // const test =
+                            //   testRef.current[Math.floor(element.key / 2)];
+                            // console.log(test);
                           },
                           onFocus: (node: any) => {
                             console.log(node);
                           },
-                          dangerouslySetInnerHTML: {
-                            __html: element.props?.children,
-                          },
-                          children: undefined,
+                          // dangerouslySetInnerHTML: {
+                          //   __html: element.props?.children,
+                          // },
+                          // children: undefined,
                         });
                         return newElement;
                       })
                     );
                   },
-                  // strong: (props: any) =>
-                  //   React.createElement(Bold, {
-                  //     ...props,
-                  //     isFocused,
-                  //     callback: ({ val, node, e }) => {
-                  //       console.log(ref.current?.innerText);
-                  //     },
-                  //   }),
-                  // em: (props: any) =>
-                  //   React.createElement(Italic, {
-                  //     ...props,
-                  //     isFocused,
-                  //     callback: ({ val, node, e }) => {
-                  //       console.log(ref.current?.innerText);
-                  //     },
-                  //   }),
                 },
               }}
             >
               {text}
             </Remark>
           </div>
-        </Card>
+        </Card> */}
 
         {/* <textarea
           value={text}
