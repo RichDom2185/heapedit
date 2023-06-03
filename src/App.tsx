@@ -7,8 +7,6 @@ import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import "./App.css";
-import Bold from "./components/text/Bold";
-import Italic from "./components/text/Italic";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -136,37 +134,61 @@ const App: React.FC = () => {
                     return React.cloneElement(
                       <p {...otherProps} className="akjsdhks" />,
                       {},
-                      React.Children.toArray(children).map((child, i) => {
-                        if (
+                      React.Children.map(children, (child, i) => {
+                        const element =
                           typeof child === "string" ||
-                          typeof child === "number"
-                        ) {
-                          return <span key={i}>{child}</span>;
-                        }
-                        // console.log(child);
-                        // return React.cloneElement(child as any, {
-                        //   isFocused: false,
-                        // });
-                        return child;
+                          typeof child === "number" ? (
+                            <span key={i}>{child}</span>
+                          ) : (
+                            child
+                          );
+                        const newElement = React.cloneElement(element as any, {
+                          ref: (node: any) => {
+                            if (testRef.current) {
+                              testRef.current.push(node);
+                            }
+                          },
+                          contentEditable: true,
+                          onInput: (e) => {
+                            console.log(e);
+                            const el = e.target as HTMLElement;
+                            console.log(el.innerHTML);
+                            console.log(i);
+                            console.log(testRef.current.map((e) => e.ref));
+                            // console.log(element);
+                            const ind = testRef.current?.findIndex(
+                              (n) => n === element
+                            );
+                            console.log(ind);
+                          },
+                          onFocus: (node: any) => {
+                            console.log(node);
+                          },
+                          dangerouslySetInnerHTML: {
+                            __html: element.props?.children,
+                          },
+                          children: undefined,
+                        });
+                        return newElement;
                       })
                     );
                   },
-                  strong: (props: any) =>
-                    React.createElement(Bold, {
-                      ...props,
-                      isFocused,
-                      callback: ({ val, node, e }) => {
-                        console.log(ref.current?.innerText);
-                      },
-                    }),
-                  em: (props: any) =>
-                    React.createElement(Italic, {
-                      ...props,
-                      isFocused,
-                      callback: ({ val, node, e }) => {
-                        console.log(ref.current?.innerText);
-                      },
-                    }),
+                  // strong: (props: any) =>
+                  //   React.createElement(Bold, {
+                  //     ...props,
+                  //     isFocused,
+                  //     callback: ({ val, node, e }) => {
+                  //       console.log(ref.current?.innerText);
+                  //     },
+                  //   }),
+                  // em: (props: any) =>
+                  //   React.createElement(Italic, {
+                  //     ...props,
+                  //     isFocused,
+                  //     callback: ({ val, node, e }) => {
+                  //       console.log(ref.current?.innerText);
+                  //     },
+                  //   }),
                 },
               }}
             >
@@ -175,13 +197,13 @@ const App: React.FC = () => {
           </div>
         </Card>
 
-        <textarea
+        {/* <textarea
           value={text}
           onChange={(e) => {
             testRef.current = [];
             setText(e.currentTarget.value);
           }}
-        />
+        /> */}
       </SimpleGrid>
     </Box>
   );
