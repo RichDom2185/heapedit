@@ -8,8 +8,7 @@ import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import "./App.css";
 import { createBlockComponent } from "./components/editor/BlockComponent";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+import { decorateInlineComponent } from "./utils/editor";
 
 const App: React.FC = () => {
   const [text, setText] = useState(
@@ -28,24 +27,24 @@ const App: React.FC = () => {
         className: "section",
       };
     });
-    selectAll("h1", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "# "), ...node.children];
-    });
-    selectAll("h2", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "## "), ...node.children];
-    });
-    selectAll("h3", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "### "), ...node.children];
-    });
-    selectAll("h4", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "#### "), ...node.children];
-    });
-    selectAll("h5", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "##### "), ...node.children];
-    });
-    selectAll("h6", hast).forEach((node) => {
-      node.children = [h("span.token-prefix", "###### "), ...node.children];
-    });
+    selectAll("h1", hast).forEach((node) =>
+      decorateInlineComponent(node, "# ")
+    );
+    selectAll("h2", hast).forEach((node) =>
+      decorateInlineComponent(node, "## ")
+    );
+    selectAll("h3", hast).forEach((node) =>
+      decorateInlineComponent(node, "### ")
+    );
+    selectAll("h4", hast).forEach((node) =>
+      decorateInlineComponent(node, "#### ")
+    );
+    selectAll("h5", hast).forEach((node) =>
+      decorateInlineComponent(node, "##### ")
+    );
+    selectAll("h6", hast).forEach((node) =>
+      decorateInlineComponent(node, "###### ")
+    );
     selectAll("strong", hast).forEach((node) => {
       node.children = [
         h("span.token-prefix", "**"),
