@@ -7,7 +7,7 @@ import {
 // Higher-order component builder
 export const createBlockComponent = (
   htmlTagName: BlockComponent,
-  handleMarkdownUpdate: React.Dispatch<React.SetStateAction<string>>
+  handleMarkdownUpdate: (updatedValue: string) => void
 ) => {
   return (props: any) => {
     const { children, ...otherProps } = props;
