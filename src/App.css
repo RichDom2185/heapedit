@@ -22,6 +22,7 @@
   display: inline-block;
   font-size: 0;
   white-space: pre;
+  color: #718096; /* Chakra UI gray.500 */
 }
 
 .section:focus .token-prefix,

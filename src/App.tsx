@@ -19,6 +19,7 @@ import remarkStringify from "remark-stringify";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import "./App.css";
+import defaultText from "./assets/defaultText.md?raw";
 import { createBlockComponent } from "./components/editor/BlockComponent";
 import { generateHastFromMdast, manipulateHast } from "./utils/parser";
 
@@ -36,9 +37,7 @@ const blockComponents = [
 ] as const;
 
 const App: React.FC = () => {
-  const [text, setText] = useState(
-    "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
-  );
+  const [text, setText] = useState(defaultText);
   const [mdastNodes, setMdastNodes] = useState<MdastRoot[]>([]);
   const [hastNodes, setHastNodes] = useState<HastNode[]>([]);
 
