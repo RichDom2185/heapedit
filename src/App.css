@@ -23,3 +23,8 @@
 .section .token-newline {
   font-size: 0;
 }
+
+.section .token-invisible {
+  visibility: hidden;
+  font-size: 0;
+}

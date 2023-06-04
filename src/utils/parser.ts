@@ -1,4 +1,5 @@
 import { selectAll } from "hast-util-select";
+import { h } from "hastscript";
 import { HastNodes } from "mdast-util-to-hast/lib";
 import { decorateInlineComponent } from "./editor";
 
@@ -27,9 +28,9 @@ export const manipulateHast = (hast: HastNodes) => {
     decorateInlineComponent(node, "`", "`")
   );
   selectAll("ol li", hast).forEach((node) =>
-    decorateInlineComponent(node, "1. ")
+    decorateInlineComponent(node, [h("span.token-invisible", " "), "1. "])
   );
   selectAll("ul li", hast).forEach((node) =>
-    decorateInlineComponent(node, " * ")
+    decorateInlineComponent(node, [h("span.token-invisible", " "), "* "])
   );
 };

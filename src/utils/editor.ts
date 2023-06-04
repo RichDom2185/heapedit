@@ -1,17 +1,18 @@
 import { Element, ElementContent } from "hast";
-import { h } from "hastscript";
+import { Child, h } from "hastscript";
 
 export const decorateInlineComponent = (
   node: Element,
-  prefix?: string,
-  suffix?: string
+  prefix?: Child,
+  suffix?: Child
 ) => {
   const newChildren: ElementContent[] = [];
-  if (prefix) {
+  // We match both null and undefined
+  if (prefix != null) {
     newChildren.push(h("span.token-prefix", prefix));
   }
   newChildren.push(...node.children);
-  if (suffix) {
+  if (suffix != null) {
     newChildren.push(h("span.token-suffix", suffix));
   }
   node.children = newChildren;
