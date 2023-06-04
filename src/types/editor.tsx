@@ -14,14 +14,22 @@ export type BlockComponent =
 
 export const blockComponentToOwnComponentMap = Object.freeze({
   p: Text,
-  h1: (props: any) => <Heading as="h1" {...props} />,
-  h2: (props: any) => <Heading as="h2" {...props} />,
-  h3: (props: any) => <Heading as="h3" {...props} />,
-  h4: (props: any) => <Heading as="h4" {...props} />,
-  h5: (props: any) => <Heading as="h5" {...props} />,
-  h6: (props: any) => <Heading as="h6" {...props} />,
-  ol: OrderedList,
-  ul: UnorderedList,
+  h1: (props: any) => <Heading as="h1" size="xl" {...props} />,
+  h2: (props: any) => <Heading as="h2" size="lg" {...props} />,
+  h3: (props: any) => <Heading as="h3" size="md" {...props} />,
+  h4: (props: any) => <Heading as="h4" size="sm" {...props} />,
+  h5: (props: any) => <Heading as="h5" size="xs" {...props} />,
+  h6: (props: any) => <Heading as="h6" size="xs" {...props} />,
+  ol: (props: any) => (
+    <Text>
+      <OrderedList {...props} />
+    </Text>
+  ),
+  ul: (props: any) => (
+    <Text>
+      <UnorderedList {...props} />
+    </Text>
+  ),
 }) satisfies Readonly<{
   // FIXME: Type this properly
   [key in BlockComponent]: any;
