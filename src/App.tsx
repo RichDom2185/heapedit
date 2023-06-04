@@ -22,6 +22,18 @@ import "./App.css";
 import { createBlockComponent } from "./components/editor/BlockComponent";
 import { generateHastFromMdast, manipulateHast } from "./utils/parser";
 
+const blockComponents = [
+  "p",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "ol",
+  "ul",
+] as const;
+
 const App: React.FC = () => {
   const [text, setText] = useState(
     "Hi there, this is a test for some **bold** text, as well as `code` and _italics_ located in this paragraph."
@@ -47,15 +59,9 @@ const App: React.FC = () => {
           createElement: React.createElement,
           Fragment: React.Fragment,
           components: {
-            p: createBlockComponent("p", callback),
-            h1: createBlockComponent("h1", callback),
-            h2: createBlockComponent("h2", callback),
-            h3: createBlockComponent("h3", callback),
-            h4: createBlockComponent("h4", callback),
-            h5: createBlockComponent("h5", callback),
-            h6: createBlockComponent("h6", callback),
-            ol: createBlockComponent("ol", callback),
-            ul: createBlockComponent("ul", callback),
+            ...Object.fromEntries(
+              blockComponents.map((c) => [c, createBlockComponent(c, callback)])
+            ),
             li: ListItem,
           },
         })
@@ -81,7 +87,7 @@ const App: React.FC = () => {
       topLevelElements.map((mdast) => {
         // TODO: Refactor
         const hast = generateHastFromMdast(mdast);
-        selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
+        selectAll(blockComponents.join(", "), hast).forEach((node) => {
           node.properties = {
             ...node.properties,
             contentEditable: true,
