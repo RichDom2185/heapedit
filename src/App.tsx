@@ -9,11 +9,12 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
+import { Node as HastNode } from "hast";
 import { selectAll } from "hast-util-select";
 import { h } from "hastscript";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import "./App.css";
@@ -26,19 +27,8 @@ const App: React.FC = () => {
   );
   const [parsed, setParsed] = useState<React.ReactNode>("");
 
-  useEffect(() => {
-    const mdast = fromMarkdown(text);
-    const hast = toHast(mdast) ?? h();
-    selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
-      node.properties = {
-        ...node.properties,
-        contentEditable: true,
-        tabIndex: "-1",
-        className: "section",
-      };
-    });
-    manipulateHast(hast);
-    setParsed(
+  const createReactNode = useCallback(
+    (hast: HastNode) =>
       unified()
         .use(rehypeReact, {
           createElement: React.createElement,
@@ -56,8 +46,24 @@ const App: React.FC = () => {
             li: ListItem,
           },
         })
-        .stringify(hast as any)
-    );
+        .stringify(hast as any),
+    [setText]
+  );
+
+  useEffect(() => {
+    const mdast = fromMarkdown(text);
+    const hast = toHast(mdast) ?? h();
+
+    selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
+      node.properties = {
+        ...node.properties,
+        contentEditable: true,
+        tabIndex: "-1",
+        className: "section",
+      };
+    });
+    manipulateHast(hast);
+    setParsed(createReactNode(hast));
   }, [text]);
 
   return (
