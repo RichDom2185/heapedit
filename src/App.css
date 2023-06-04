@@ -20,7 +20,12 @@
   font-size: inherit;
 }
 
-.section .token-newline {
+/* Hacky fix to target the line separator only
+ * FIXME: This does not solve the actual root cause
+ *        which is weird cursor position when adding
+ *        a line break at the beginning/end of a token
+ */
+.section .token-newline::first-letter {
   font-size: 0;
 }
 
