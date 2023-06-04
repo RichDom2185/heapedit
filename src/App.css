@@ -19,3 +19,7 @@
   visibility: visible;
   font-size: inherit;
 }
+
+.section .token-newline {
+  font-size: 0;
+}

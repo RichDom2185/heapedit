@@ -33,10 +33,10 @@ const App: React.FC = () => {
 
   const createReactNode = useCallback(
     (hast: HastNode, index: number) => {
-      const callback = (updatedText: string) => {
+      const callback = (updatedText: string[]) => {
         setText(() => {
-          const newNodes = mdastNodes.map((node, i) =>
-            i !== index ? node : fromMarkdown(updatedText)
+          const newNodes = mdastNodes.flatMap((node, i) =>
+            i !== index ? [node] : updatedText.map((v) => fromMarkdown(v))
           );
 
           return newNodes
@@ -102,7 +102,12 @@ const App: React.FC = () => {
         <Heading>heapedit</Heading>
 
         <Card sx={{ paddingBlock: 3, paddingInline: 4 }}>
-          <Stack gap={2}>{hastNodes.map(createReactNode)}</Stack>
+          <Stack gap={2}>
+            {hastNodes.map((node, i) => {
+              const reactElement = createReactNode(node, i);
+              return <React.Fragment key={i}>{reactElement}</React.Fragment>;
+            })}
+          </Stack>
         </Card>
 
         <Box position="relative">
