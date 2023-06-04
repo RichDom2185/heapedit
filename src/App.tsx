@@ -101,8 +101,8 @@ const App: React.FC = () => {
       <Stack gap={4}>
         <Heading>heapedit</Heading>
 
-        <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
-          <div>{hastNodes.map(createReactNode)}</div>
+        <Card sx={{ paddingBlock: 3, paddingInline: 4 }}>
+          <Stack gap={2}>{hastNodes.map(createReactNode)}</Stack>
         </Card>
 
         <Box position="relative">
