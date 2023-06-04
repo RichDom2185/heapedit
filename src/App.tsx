@@ -14,7 +14,7 @@ import { selectAll } from "hast-util-select";
 import { h } from "hastscript";
 import { Root as MdastRoot } from "mdast";
 import { fromMarkdown } from "mdast-util-from-markdown";
-import { toHast } from "mdast-util-to-hast";
+import { defaultHandlers, toHast } from "mdast-util-to-hast";
 import React, { useCallback, useEffect, useState } from "react";
 import rehypeReact from "rehype-react";
 import remarkStringify from "remark-stringify";
@@ -81,7 +81,15 @@ const App: React.FC = () => {
 
     setHastNodes(
       topLevelElements.map((mdast) => {
-        const hast = toHast(mdast) ?? h();
+        // TODO: Refactor
+        const hast =
+          toHast(mdast, {
+            handlers: {
+              text: (state, node) => {
+                return h("span", defaultHandlers.text(state, node));
+              },
+            },
+          }) ?? h();
         selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
           node.properties = {
             ...node.properties,
