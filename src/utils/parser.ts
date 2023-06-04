@@ -9,6 +9,14 @@ import {
 import { affixChildren } from "./editor";
 
 const handlers: MdastToHastConverterOptions["handlers"] = {
+  // Wrap all code#text with their own span element
+  inlineCode: (state, node) => {
+    const element = defaultHandlers.inlineCode(state, node);
+    element.children = element.children.map((child) =>
+      child.type === "text" ? h("span", child) : child
+    );
+    return element;
+  },
   // Wrap all text nodes with their own span element
   text: (state, node) => {
     return h("span", defaultHandlers.text(state, node));
