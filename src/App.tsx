@@ -1,4 +1,4 @@
-import { Box, Card, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Box, Card, Heading, ListItem, SimpleGrid } from "@chakra-ui/react";
 import { selectAll } from "hast-util-select";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
@@ -17,8 +17,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const mdast = fromMarkdown(text);
-    const hast = toHast(mdast, {});
-    selectAll("p, h1, h2, h3, h4, h5, h6", hast).forEach((node) => {
+    const hast = toHast(mdast);
+    selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
       node.properties = {
         ...node.properties,
         contentEditable: true,
@@ -53,6 +53,12 @@ const App: React.FC = () => {
     selectAll("code", hast).forEach((node) =>
       decorateInlineComponent(node, "`", "`")
     );
+    selectAll("ol li", hast).forEach((node) =>
+      decorateInlineComponent(node, "1. ")
+    );
+    selectAll("ul li", hast).forEach((node) =>
+      decorateInlineComponent(node, " * ")
+    );
     setParsed(
       unified()
         .use(rehypeReact, {
@@ -66,6 +72,9 @@ const App: React.FC = () => {
             h4: createBlockComponent("h4", setText),
             h5: createBlockComponent("h5", setText),
             h6: createBlockComponent("h6", setText),
+            ol: createBlockComponent("ol", setText),
+            ul: createBlockComponent("ul", setText),
+            li: ListItem,
           },
         })
         .stringify(hast as any)
