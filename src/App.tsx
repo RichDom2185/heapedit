@@ -1,12 +1,10 @@
 import {
-  AbsoluteCenter,
   Box,
   Card,
   Divider,
   Heading,
   ListItem,
   Stack,
-  Text,
   Textarea,
 } from "@chakra-ui/react";
 import { Node as HastNode } from "hast";
@@ -106,30 +104,28 @@ const App: React.FC = () => {
       <Stack gap={4}>
         <Heading>heapedit</Heading>
 
-        <Card sx={{ paddingBlock: 3, paddingInline: 2 }}>
-          <Stack gap={2}>
-            {hastNodes.map((node, i) => {
-              const reactElement = createReactNode(node, i);
-              return <React.Fragment key={i}>{reactElement}</React.Fragment>;
-            })}
-          </Stack>
-        </Card>
+        <Stack direction="row" gap={3}>
+          <Textarea
+            value={text}
+            h={500}
+            w="100%"
+            onChange={(e) => setText(e.currentTarget.value)}
+            placeholder="Enter markdown here"
+          />
 
-        <Box position="relative">
-          <Divider />
-          <AbsoluteCenter bg="white" px="4">
-            <Text as="i">Markdown below, content above</Text>
-          </AbsoluteCenter>
-        </Box>
+          <Box position="relative">
+            <Divider orientation="vertical" />
+          </Box>
 
-        <Textarea
-          value={text}
-          height={500}
-          onChange={(e) => {
-            setText(e.currentTarget.value);
-          }}
-          placeholder="Enter markdown here"
-        />
+          <Card sx={{ paddingBlock: 3, paddingInline: 2, w: "100%" }}>
+            <Stack gap={2}>
+              {hastNodes.map((node, i) => {
+                const reactElement = createReactNode(node, i);
+                return <React.Fragment key={i}>{reactElement}</React.Fragment>;
+              })}
+            </Stack>
+          </Card>
+        </Stack>
       </Stack>
     </Box>
   );
