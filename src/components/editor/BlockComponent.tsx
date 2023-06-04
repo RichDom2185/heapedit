@@ -74,9 +74,16 @@ export const createBlockComponent = (
       },
     };
     const Component = blockComponentToOwnComponentMap[htmlTagName];
-    return React.cloneElement(
-      <Component ref={ref} {...otherProps} suppressContentEditableWarning />,
-      overriddenProps,
+    return React.createElement(
+      Component,
+      {
+        ...props,
+        ...overriddenProps,
+        suppressContentEditableWarning: true,
+        // TODO: Suppress warning
+        ref: ref, // targets "normal" elements
+        innerRef: ref, // targets functional elements
+      },
       React.Children.map(children, (child, i) => {
         const element =
           typeof child === "string" || typeof child === "number" ? (
