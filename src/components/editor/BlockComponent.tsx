@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   BlockComponent,
   blockComponentToOwnComponentMap,
@@ -13,18 +13,25 @@ export const createBlockComponent = (
 ) => {
   return (props: any) => {
     const { children, ...otherProps } = props;
-    const overriddenProps: {
-      onBlur: React.FocusEventHandler;
-      onKeyDown: React.KeyboardEventHandler;
-    } = {
-      onBlur: (e) => {
-        const value = e.target.textContent ?? "";
+    const [value, setValue] = useState("");
+
+    const blurCallback: React.FocusEventHandler = useCallback(
+      (e) => {
         handleMarkdownUpdate(
           value
             .split(new RegExp(`${lineSeparator}{2,}`))
             .map((s) => s.replaceAll(lineSeparator, "\n"))
         );
       },
+      [value, handleMarkdownUpdate]
+    );
+
+    const overriddenProps: {
+      onBlur: React.FocusEventHandler;
+      onKeyDown: React.KeyboardEventHandler;
+      onInput: React.FormEventHandler;
+    } = {
+      onBlur: blurCallback,
       onKeyDown: (e) => {
         if (e.key === "Enter") {
           document.execCommand(
@@ -33,6 +40,10 @@ export const createBlockComponent = (
             `<span class="token-newline">${lineSeparator}</span>`
           );
         }
+      },
+      onInput: (e) => {
+        const value = (e.target as HTMLElement).textContent ?? "";
+        setValue(value);
       },
     };
     const Component = blockComponentToOwnComponentMap[htmlTagName];
