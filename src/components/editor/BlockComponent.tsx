@@ -1,5 +1,5 @@
 import { useIdle } from "@mantine/hooks";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   BlockComponent,
   blockComponentToOwnComponentMap,
@@ -14,9 +14,18 @@ export const createBlockComponent = (
 ) => {
   return (props: any) => {
     const { children, ...otherProps } = props;
-    const [value, setValue] = useState("");
     const [isFocused, setIsFocused] = useState(false);
-    const isIdle = useIdle(2000);
+    const isIdle = useIdle(1000);
+
+    // Get the initial value from the DOM
+    const [value, setValue] = useState("");
+    const ref = useRef<HTMLElement>(null);
+    useEffect(() => {
+      if (ref.current) {
+        const text = ref.current.textContent ?? "";
+        setValue(text);
+      }
+    }, []);
 
     const blurCallback = useCallback(() => {
       handleMarkdownUpdate(
@@ -59,7 +68,7 @@ export const createBlockComponent = (
     };
     const Component = blockComponentToOwnComponentMap[htmlTagName];
     return React.cloneElement(
-      <Component {...otherProps} suppressContentEditableWarning />,
+      <Component ref={ref} {...otherProps} suppressContentEditableWarning />,
       overriddenProps,
       React.Children.map(children, (child, i) => {
         const element =
