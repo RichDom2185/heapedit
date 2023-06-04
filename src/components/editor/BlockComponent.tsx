@@ -64,6 +64,8 @@ export const createBlockComponent = (
         }
         if (e.key === "Escape") {
           blurCallback();
+          // Force a blur even when there is no change in the content
+          (e.target as HTMLElement).blur();
         }
       },
       onInput: (e) => {
