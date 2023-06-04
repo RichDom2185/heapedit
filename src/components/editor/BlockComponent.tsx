@@ -12,6 +12,7 @@ export const createBlockComponent = (
   handleMarkdownUpdate: (updatedValue: string[]) => void
 ) => {
   return (props: any) => {
+    const { children, ...otherProps } = props;
     const overriddenProps: {
       onBlur: React.FocusEventHandler;
       onKeyDown: React.KeyboardEventHandler;
@@ -47,8 +48,17 @@ export const createBlockComponent = (
     };
     const Component = blockComponentToOwnComponentMap[htmlTagName];
     return React.cloneElement(
-      <Component {...props} suppressContentEditableWarning />,
-      overriddenProps
+      <Component {...otherProps} suppressContentEditableWarning />,
+      overriddenProps,
+      React.Children.map(children, (child, i) => {
+        const element =
+          typeof child === "string" || typeof child === "number" ? (
+            <span key={i}>{child}</span>
+          ) : (
+            child
+          );
+        return element;
+      })
     );
   };
 };
