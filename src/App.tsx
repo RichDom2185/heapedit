@@ -89,7 +89,7 @@ const App: React.FC = () => {
           node.properties = {
             ...node.properties,
             contentEditable: true,
-            tabIndex: "-1",
+            tabIndex: 0,
             className: "section",
           };
         });
