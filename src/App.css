@@ -3,3 +3,19 @@
   padding: 2rem;
   min-height: 100vh;
 }
+
+/* Hide prefix and suffix when container not focused */
+
+.section .token-prefix,
+.section .token-suffix {
+  visibility: hidden;
+  display: inline-block;
+  font-size: 0;
+  white-space: pre;
+}
+
+.section:focus .token-prefix,
+.section:focus .token-suffix {
+  visibility: visible;
+  font-size: inherit;
+}
