@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from "react";
+import { useIdle } from "@mantine/hooks";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   BlockComponent,
   blockComponentToOwnComponentMap,
@@ -14,24 +15,34 @@ export const createBlockComponent = (
   return (props: any) => {
     const { children, ...otherProps } = props;
     const [value, setValue] = useState("");
+    const [isFocused, setIsFocused] = useState(false);
+    const isIdle = useIdle(2000);
 
-    const blurCallback: React.FocusEventHandler = useCallback(
-      (e) => {
-        handleMarkdownUpdate(
-          value
-            .split(new RegExp(`${lineSeparator}{2,}`))
-            .map((s) => s.replaceAll(lineSeparator, "\n"))
-        );
-      },
-      [value, handleMarkdownUpdate]
-    );
+    const blurCallback = useCallback(() => {
+      handleMarkdownUpdate(
+        value
+          .split(new RegExp(`${lineSeparator}{2,}`))
+          .map((s) => s.replaceAll(lineSeparator, "\n"))
+      );
+    }, [value, handleMarkdownUpdate]);
+
+    useEffect(() => {
+      if (isIdle && isFocused) {
+        blurCallback();
+      }
+    }, [isIdle, isFocused, blurCallback]);
 
     const overriddenProps: {
       onBlur: React.FocusEventHandler;
+      onFocus: React.FocusEventHandler;
       onKeyDown: React.KeyboardEventHandler;
       onInput: React.FormEventHandler;
     } = {
-      onBlur: blurCallback,
+      onBlur: () => {
+        setIsFocused(false);
+        blurCallback();
+      },
+      onFocus: () => setIsFocused(true),
       onKeyDown: (e) => {
         if (e.key === "Enter") {
           document.execCommand(
