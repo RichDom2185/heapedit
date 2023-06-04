@@ -1,7 +1,7 @@
 import { Element, ElementContent } from "hast";
 import { Child, h } from "hastscript";
 
-export const decorateInlineComponent = (
+export const affixChildren = (
   node: Element,
   prefix?: Child,
   suffix?: Child
