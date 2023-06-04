@@ -29,7 +29,7 @@ const targets = [
   "h6",
   "strong",
   "em",
-  "code",
+  "*:not(pre) code",
 ] as const;
 
 type Prefix = string | Child;
@@ -44,7 +44,7 @@ const affixes = Object.freeze({
   h6: ["###### "] as const,
   strong: ["**", "**"] as const,
   em: ["_", "_"] as const,
-  code: ["`", "`"] as const,
+  "*:not(pre) code": ["`", "`"] as const,
 }) satisfies {
   readonly [key in (typeof targets)[number]]: readonly [Prefix?, Suffix?];
 };

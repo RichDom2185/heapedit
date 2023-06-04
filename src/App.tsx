@@ -32,6 +32,7 @@ const blockComponents = [
   "h6",
   "ol",
   "ul",
+  "pre",
 ] as const;
 
 const App: React.FC = () => {

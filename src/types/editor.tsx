@@ -1,4 +1,10 @@
-import { Heading, OrderedList, Text, UnorderedList } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  OrderedList,
+  Text,
+  UnorderedList,
+} from "@chakra-ui/react";
 
 // TODO: Support more
 export type BlockComponent =
@@ -10,7 +16,8 @@ export type BlockComponent =
   | "h5"
   | "h6"
   | "ul"
-  | "ol";
+  | "ol"
+  | "pre";
 
 export const blockComponentToOwnComponentMap = Object.freeze({
   p: Text,
@@ -30,6 +37,7 @@ export const blockComponentToOwnComponentMap = Object.freeze({
       <UnorderedList {...props} />
     </Text>
   ),
+  pre: (props: any) => <Box as="pre" {...props} />,
 }) satisfies Readonly<{
   // FIXME: Type this properly
   [key in BlockComponent]: any;
