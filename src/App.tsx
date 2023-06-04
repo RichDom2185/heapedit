@@ -11,10 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { Node as HastNode } from "hast";
 import { selectAll } from "hast-util-select";
-import { h } from "hastscript";
 import { Root as MdastRoot } from "mdast";
 import { fromMarkdown } from "mdast-util-from-markdown";
-import { defaultHandlers, toHast } from "mdast-util-to-hast";
 import React, { useCallback, useEffect, useState } from "react";
 import rehypeReact from "rehype-react";
 import remarkStringify from "remark-stringify";
@@ -22,7 +20,7 @@ import { unified } from "unified";
 import { visit } from "unist-util-visit";
 import "./App.css";
 import { createBlockComponent } from "./components/editor/BlockComponent";
-import { manipulateHast } from "./utils/parser";
+import { generateHastFromMdast, manipulateHast } from "./utils/parser";
 
 const App: React.FC = () => {
   const [text, setText] = useState(
@@ -82,14 +80,7 @@ const App: React.FC = () => {
     setHastNodes(
       topLevelElements.map((mdast) => {
         // TODO: Refactor
-        const hast =
-          toHast(mdast, {
-            handlers: {
-              text: (state, node) => {
-                return h("span", defaultHandlers.text(state, node));
-              },
-            },
-          }) ?? h();
+        const hast = generateHastFromMdast(mdast);
         selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
           node.properties = {
             ...node.properties,

@@ -1,7 +1,23 @@
 import { selectAll } from "hast-util-select";
 import { h } from "hastscript";
-import { HastNodes } from "mdast-util-to-hast/lib";
+import { defaultHandlers, toHast } from "mdast-util-to-hast";
+import {
+  HastNodes,
+  MdastRoot,
+  Options as MdastToHastConverterOptions,
+} from "mdast-util-to-hast/lib";
 import { decorateInlineComponent } from "./editor";
+
+const handlers: MdastToHastConverterOptions["handlers"] = {
+  // Wrap all text nodes with their own span element
+  text: (state, node) => {
+    return h("span", defaultHandlers.text(state, node));
+  },
+};
+
+export const generateHastFromMdast = (mdast: MdastRoot): HastNodes => {
+  return toHast(mdast, { handlers }) ?? h();
+};
 
 export const manipulateHast = (hast: HastNodes) => {
   selectAll("h1", hast).forEach((node) => decorateInlineComponent(node, "# "));
