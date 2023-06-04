@@ -4,6 +4,16 @@
   min-height: 100vh;
 }
 
+.section {
+  padding-inline: 10px;
+}
+
+.section:focus {
+  outline: none;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+}
+
 /* Hide prefix and suffix when container not focused */
 
 .section .token-prefix,

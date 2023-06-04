@@ -1,4 +1,3 @@
-import { useIdle } from "@mantine/hooks";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   BlockComponent,
@@ -15,7 +14,9 @@ export const createBlockComponent = (
   return (props: any) => {
     const { children, ...otherProps } = props;
     const [isFocused, setIsFocused] = useState(false);
-    const isIdle = useIdle(1000);
+    const isIdle = false;
+    // const isIdle = useIdle(1000);
+    const [canUpdate, setCanUpdate] = useState(false);
 
     // Get the initial value from the DOM
     const [value, setValue] = useState("");
@@ -36,7 +37,7 @@ export const createBlockComponent = (
     }, [value, handleMarkdownUpdate]);
 
     useEffect(() => {
-      if (isIdle && isFocused) {
+      if (isIdle && isFocused && canUpdate && value.includes(lineSeparator)) {
         blurCallback();
       }
     }, [isIdle, isFocused, blurCallback]);
@@ -53,12 +54,16 @@ export const createBlockComponent = (
       },
       onFocus: () => setIsFocused(true),
       onKeyDown: (e) => {
+        setCanUpdate(e.key !== "Enter");
         if (e.key === "Enter") {
           document.execCommand(
             "insertHTML",
             false,
             `<span class="token-newline">${lineSeparator}</span>`
           );
+        }
+        if (e.key === "Escape") {
+          blurCallback();
         }
       },
       onInput: (e) => {

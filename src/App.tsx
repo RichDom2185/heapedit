@@ -100,7 +100,7 @@ const App: React.FC = () => {
       <Stack gap={4}>
         <Heading>heapedit</Heading>
 
-        <Card sx={{ paddingBlock: 3, paddingInline: 4 }}>
+        <Card sx={{ paddingBlock: 3, paddingInline: 2 }}>
           <Stack gap={2}>
             {hastNodes.map((node, i) => {
               const reactElement = createReactNode(node, i);
