@@ -19,6 +19,7 @@ export const generateHastFromMdast = (mdast: MdastRoot): HastNodes => {
   return toHast(mdast, { handlers }) ?? h();
 };
 
+/** Tokens to be affixed with either a prefix or suffix. */
 const targets = [
   "h1",
   "h2",
@@ -33,16 +34,17 @@ const targets = [
 
 type Prefix = string | Child;
 type Suffix = string | Child;
+/** The prefix or suffix to be affixed to the tokens. */
 const affixes = Object.freeze({
-  h1: ["# "],
-  h2: ["## "],
-  h3: ["### "],
-  h4: ["#### "],
-  h5: ["##### "],
-  h6: ["###### "],
-  strong: ["**", "**"],
-  em: ["_", "_"],
-  code: ["`", "`"],
+  h1: ["# "] as const,
+  h2: ["## "] as const,
+  h3: ["### "] as const,
+  h4: ["#### "] as const,
+  h5: ["##### "] as const,
+  h6: ["###### "] as const,
+  strong: ["**", "**"] as const,
+  em: ["_", "_"] as const,
+  code: ["`", "`"] as const,
 }) satisfies {
   readonly [key in (typeof targets)[number]]: readonly [Prefix?, Suffix?];
 };
