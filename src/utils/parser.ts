@@ -30,6 +30,8 @@ const targets = [
   "strong",
   "em",
   "*:not(pre) code",
+  "ol li",
+  "ul li",
 ] as const;
 
 type Prefix = string | Child;
@@ -45,6 +47,8 @@ const affixes = Object.freeze({
   strong: ["**", "**"] as const,
   em: ["_", "_"] as const,
   "*:not(pre) code": ["`", "`"] as const,
+  "ol li": ["1. "] as const,
+  "ul li": ["* "] as const,
 }) satisfies {
   readonly [key in (typeof targets)[number]]: readonly [Prefix?, Suffix?];
 };
@@ -54,11 +58,5 @@ export const manipulateHast = (hast: HastNodes) => {
     selectAll(target, hast).forEach((node) =>
       affixChildren(node, ...affixes[target])
     )
-  );
-  selectAll("ol li", hast).forEach((node) =>
-    affixChildren(node, [h("span.token-invisible", " "), "1. "])
-  );
-  selectAll("ul li", hast).forEach((node) =>
-    affixChildren(node, [h("span.token-invisible", " "), "* "])
   );
 };
