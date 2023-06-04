@@ -1,4 +1,14 @@
-import { Box, Card, Heading, ListItem, SimpleGrid } from "@chakra-ui/react";
+import {
+  AbsoluteCenter,
+  Box,
+  Card,
+  Divider,
+  Heading,
+  ListItem,
+  Stack,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import { selectAll } from "hast-util-select";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
@@ -83,21 +93,29 @@ const App: React.FC = () => {
 
   return (
     <Box>
-      <SimpleGrid spacingY={4}>
+      <Stack gap={4}>
         <Heading>heapedit</Heading>
 
         <Card sx={{ paddingBlock: 2, paddingInline: 3 }}>
           <div>{parsed}</div>
         </Card>
 
-        {/* FOR DEBUGGING PURPOSES */}
-        <textarea
+        <Box position="relative">
+          <Divider />
+          <AbsoluteCenter bg="white" px="4">
+            <Text as="i">Markdown below, content above</Text>
+          </AbsoluteCenter>
+        </Box>
+
+        <Textarea
           value={text}
+          height={500}
           onChange={(e) => {
             setText(e.currentTarget.value);
           }}
+          placeholder="Enter markdown here"
         />
-      </SimpleGrid>
+      </Stack>
     </Box>
   );
 };
