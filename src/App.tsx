@@ -10,6 +10,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { selectAll } from "hast-util-select";
+import { h } from "hastscript";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import { toHast } from "mdast-util-to-hast";
 import React, { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ import rehypeReact from "rehype-react";
 import { unified } from "unified";
 import "./App.css";
 import { createBlockComponent } from "./components/editor/BlockComponent";
-import { decorateInlineComponent } from "./utils/editor";
+import { manipulateHast } from "./utils/parser";
 
 const App: React.FC = () => {
   const [text, setText] = useState(
@@ -27,7 +28,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const mdast = fromMarkdown(text);
-    const hast = toHast(mdast);
+    const hast = toHast(mdast) ?? h();
     selectAll("p, h1, h2, h3, h4, h5, h6, ol, ul", hast).forEach((node) => {
       node.properties = {
         ...node.properties,
@@ -36,39 +37,7 @@ const App: React.FC = () => {
         className: "section",
       };
     });
-    selectAll("h1", hast).forEach((node) =>
-      decorateInlineComponent(node, "# ")
-    );
-    selectAll("h2", hast).forEach((node) =>
-      decorateInlineComponent(node, "## ")
-    );
-    selectAll("h3", hast).forEach((node) =>
-      decorateInlineComponent(node, "### ")
-    );
-    selectAll("h4", hast).forEach((node) =>
-      decorateInlineComponent(node, "#### ")
-    );
-    selectAll("h5", hast).forEach((node) =>
-      decorateInlineComponent(node, "##### ")
-    );
-    selectAll("h6", hast).forEach((node) =>
-      decorateInlineComponent(node, "###### ")
-    );
-    selectAll("strong", hast).forEach((node) =>
-      decorateInlineComponent(node, "**", "**")
-    );
-    selectAll("em", hast).forEach((node) =>
-      decorateInlineComponent(node, "_", "_")
-    );
-    selectAll("code", hast).forEach((node) =>
-      decorateInlineComponent(node, "`", "`")
-    );
-    selectAll("ol li", hast).forEach((node) =>
-      decorateInlineComponent(node, "1. ")
-    );
-    selectAll("ul li", hast).forEach((node) =>
-      decorateInlineComponent(node, " * ")
-    );
+    manipulateHast(hast);
     setParsed(
       unified()
         .use(rehypeReact, {
