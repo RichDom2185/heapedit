@@ -2243,9 +2243,9 @@ picocolors@^1.0.0:
   integrity sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==
 
 postcss@^8.4.25:
-  version "8.4.25"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.25.tgz#4a133f5e379eda7f61e906c3b1aaa9b81292726f"
-  integrity sha512-7taJ/8t2av0Z+sQEvNzCkpDynl0tX3uJMCODi6nT3PfASC7dYCWV9aQ+uiCf+KBD4SEFcu+GvJdGdwzQ6OSjCw==
+  version "8.4.26"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.4.26.tgz#1bc62ab19f8e1e5463d98cf74af39702a00a9e94"
+  integrity sha512-jrXHFF8iTloAenySjM/ob3gSj7pCu0Ji49hnjqzsgSRa50hkWCKD0HQ+gMNJkW38jBI68MpAAg7ZWwHwX8NMMw==
   dependencies:
     nanoid "^3.3.6"
     picocolors "^1.0.0"
@@ -2618,9 +2618,9 @@ vfile@^5.0.0:
     vfile-message "^3.0.0"
 
 vite@^4.1.5:
-  version "4.4.3"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.3.tgz#dfaf86f4cba3058bf2724e2e2c88254fb0f21a5a"
-  integrity sha512-IMnXQXXWgLi5brBQx/4WzDxdzW0X3pjO4nqFJAuNvwKtxzAmPzFE1wszW3VDpAGQJm3RZkm/brzRdyGsnwgJIA==
+  version "4.4.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.4.4.tgz#b76e6049c0e080cb54e735ad2d18287753752118"
+  integrity sha512-4mvsTxjkveWrKDJI70QmelfVqTm+ihFAb6+xf4sjEU2TmUCTlVX87tmg/QooPEMQb/lM9qGHT99ebqPziEd3wg==
   dependencies:
     esbuild "^0.18.10"
     postcss "^8.4.25"
