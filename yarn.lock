@@ -1678,9 +1678,9 @@ focus-lock@^0.11.6:
     tslib "^2.0.3"
 
 framer-motion@^10.12.16:
-  version "10.12.16"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.12.16.tgz#ccba11d216ac370c6bc65fcd9953a61deb54f071"
-  integrity sha512-w/SfWEIWJkYSgRHYBmln7EhcNo31ao8Xexol8lGXf1pR/tlnBtf1HcxoUmEiEh6pacB4/geku5ami53AAQWHMQ==
+  version "10.12.21"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-10.12.21.tgz#ea36b8db4dbb561d5fac7a978c2cd467f6d39a1b"
+  integrity sha512-EmnP73O5+1OGm2jtQNoBPPuAJvhySl+p4/9PL7PPJHt58nkPWeFaxhCJaUDXDf6N3jSLluefxopc0FrMCQ+/tQ==
   dependencies:
     tslib "^2.4.0"
   optionalDependencies:
@@ -2476,15 +2476,10 @@ tslib@2.4.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
-tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0:
+tslib@^2.0.0, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
   integrity sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==
-
-tslib@^2.4.0:
-  version "2.5.2"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.5.2.tgz#1b6f07185c881557b0ffa84b111a0106989e8338"
-  integrity sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==
 
 typescript@^4.9.3:
   version "4.9.5"
