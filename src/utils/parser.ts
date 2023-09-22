@@ -3,7 +3,7 @@ import { Child, h } from "hastscript";
 import { defaultHandlers, toHast } from "mdast-util-to-hast";
 import {
   HastNodes,
-  MdastRoot,
+  MdastNodes,
   Options as MdastToHastConverterOptions,
 } from "mdast-util-to-hast/lib";
 import { affixChildren } from "./editor";
@@ -23,7 +23,7 @@ const handlers: MdastToHastConverterOptions["handlers"] = {
   },
 };
 
-export const generateHastFromMdast = (mdast: MdastRoot): HastNodes => {
+export const generateHastFromMdast = (mdast: MdastNodes): HastNodes => {
   return toHast(mdast, { handlers }) ?? h();
 };
 

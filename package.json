@@ -8,6 +8,9 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
+  "resolutions": {
+    "@types/mdast": "^4.0.0"
+  },
   "dependencies": {
     "@chakra-ui/react": "^2.6.1",
     "@emotion/react": "^11.11.0",
