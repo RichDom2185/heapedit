@@ -1313,9 +1313,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@mantine/hooks@^7.0.0":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.0.1.tgz#d1c1729b88d62604acb2143ffba8d41e47c6fd06"
-  integrity sha512-rPHghtUh1YYhArZzhVHMWEX4kWVieffuuaOGB8954Yyw0o1X7wIgQ35cVRS52CGtFbUToS7kaYSdxI0THkca/Q==
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.0.2.tgz#2a561a34a451d6b332253f070fc7d4649397d1c0"
+  integrity sha512-Zs0h7O9yI4Lhcebp/eXN+jfFSBS4jNuKRN5msj54decKcnA9ZxjkUpUqAwCNU0Re+cx6RFSBmB8eOA/+5sw+nA==
 
 "@mapbox/hast-util-table-cell-style@^0.2.0":
   version "0.2.0"
