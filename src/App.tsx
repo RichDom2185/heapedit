@@ -12,6 +12,7 @@ import { selectAll } from "hast-util-select";
 import { Root as MdastRoot } from "mdast";
 import { fromMarkdown } from "mdast-util-from-markdown";
 import React, { useCallback, useEffect, useState } from "react";
+import * as runtime from "react/jsx-runtime";
 import rehypeReact from "rehype-react";
 import remarkStringify from "remark-stringify";
 import { unified } from "unified";
@@ -54,15 +55,15 @@ const App: React.FC = () => {
       };
       return unified()
         .use(rehypeReact, {
-          createElement: React.createElement,
-          Fragment: React.Fragment,
+          ...runtime,
           components: {
             ...Object.fromEntries(
               blockComponents.map((c) => [c, createBlockComponent(c, callback)])
             ),
             li: ListItem,
           },
-        })
+          // Typecast needed due to custom components
+        } as any)
         .stringify(hast as any);
     },
     [text, mdastNodes]
