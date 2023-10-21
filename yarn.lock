@@ -1337,9 +1337,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@mantine/hooks@^7.0.0":
-  version "7.1.3"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.1.3.tgz#f4e91dd13196e06f474a31163f9927e8eb597eeb"
-  integrity sha512-jCOedyl229vzNEoya9L/PIeT+Btwuoqh09vRbFRNoTdRZgVMTWi4BT08BRWK5iqSa9PlvWtIaSGcCtjqqXKZcA==
+  version "7.1.5"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.1.5.tgz#445854b2e35d7a99c5ecd19bca8d39203b2dc686"
+  integrity sha512-LuKlJ5VDLYBMcleyKcL6nvcJZQaeJF4mIU5ryEiucy7IleZoD+lqWwNC1VAAN1fsjBRQfhFtFoRihUdIy/vDCA==
 
 "@popperjs/core@^2.9.3":
   version "2.11.8"
@@ -1347,9 +1347,9 @@
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@types/babel__core@^7.20.2":
-  version "7.20.2"
-  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.2.tgz#215db4f4a35d710256579784a548907237728756"
-  integrity sha512-pNpr1T1xLUc2l3xJKuPtsEky3ybxN3m4fJkknfIpTCTfIZCDW57oAg+EfCgIIp2rvCe0Wn++/FfodDS4YXxBwA==
+  version "7.20.3"
+  resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.3.tgz#d5625a50b6f18244425a1359a858c73d70340778"
+  integrity sha512-54fjTSeSHwfan8AyHWrKbfBWiEUrNTZsUwPTDSNaaP1QDQIZbeNUg3a59E9D+375MzUw/x1vx2/0F5LBz+AeYA==
   dependencies:
     "@babel/parser" "^7.20.7"
     "@babel/types" "^7.20.7"
