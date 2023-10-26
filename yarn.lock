@@ -1337,9 +1337,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@mantine/hooks@^7.0.0":
-  version "7.1.5"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.1.5.tgz#445854b2e35d7a99c5ecd19bca8d39203b2dc686"
-  integrity sha512-LuKlJ5VDLYBMcleyKcL6nvcJZQaeJF4mIU5ryEiucy7IleZoD+lqWwNC1VAAN1fsjBRQfhFtFoRihUdIy/vDCA==
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.1.6.tgz#12bb97d21686c3908dc0cd6f931de8e12090d501"
+  integrity sha512-Yctcv21ttLYpcN/5gt2xCHB88U1rPNqHBkLVd7DMAB72LUkr4wp6xAVtELl576n7wHf36nshSkFCyNXh9Gm3eA==
 
 "@popperjs/core@^2.9.3":
   version "2.11.8"
